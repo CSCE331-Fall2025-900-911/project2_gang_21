@@ -1,15 +1,34 @@
+DROP TABLE IF EXISTS "Employee";
+DROP TABLE IF EXISTS "Customer";
+DROP TABLE IF EXISTS "Order";
+DROP TABLE IF EXISTS "OrderItem";
+DROP TABLE IF EXISTS "Recipe";
+DROP TABLE IF EXISTS "Inventory";
+DROP TABLE IF EXISTS "MenuItem";
+
 CREATE TABLE IF NOT EXISTS "MenuItem" (
   "id" INT PRIMARY KEY,
   "name" VARCHAR,
   "price" DECIMAL
 );
 
+CREATE TABLE IF NOT EXISTS "Employee" (
+  "id" INT PRIMARY KEY,
+  "isManager" BOOLEAN
+);  
+
+CREATE TABLE IF NOT EXISTS "Customer" (
+  "id" INT PRIMARY KEY,
+  "email" VARCHAR,
+  "points" INT
+);
+
 CREATE TABLE IF NOT EXISTS "Order" (
   "id" INT PRIMARY KEY,
-  "date" DATETIME,
+  "date" TIMESTAMP,
   "price" DECIMAL,
   "employeeId" INT,
-  "customerId" INT
+  "customerId" INT,
     CONSTRAINT "FK_Order_employeeId"
         FOREIGN KEY ("employeeId") 
             REFERENCES "Employee"("id"),
@@ -36,21 +55,10 @@ CREATE TABLE IF NOT EXISTS "OrderItem" (
       REFERENCES "Order"("id")
 );
 
-CREATE TABLE IF NOT EXISTS "Customer" (
-  "id" INT PRIMARY KEY,
-  "email" VARCHAR,
-  "points" INT
-);
-
-CREATE TABLE IF NOT EXISTS "Employee" (
-  "id" INT PRIMARY KEY,
-  "isManager" BOOLEAN
-);
-
 CREATE TABLE IF NOT EXISTS "Inventory" (
   "id" INT PRIMARY KEY,
   "quantity" DECIMAL,
-  "name" VARCHAR,
+  "name" VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS "Topping" (
@@ -60,28 +68,28 @@ CREATE TABLE IF NOT EXISTS "Topping" (
 );
 
 
-CREATE TABLE IF NOT EXISTS "OrderItem_Topping" {
+CREATE TABLE IF NOT EXISTS "OrderItem_Topping" (
   "orderId" INT,
   "toppingId" INT,
   PRIMARY KEY ("orderId", "toppingId"),
   CONSTRAINT "FK_OrderItem_orderId"
-    FOREIGN KEY "orderId"
+    FOREIGN KEY ("orderId")
       REFERENCES "OrderItem"("id"),
   CONSTRAINT "FK_OrderItem_toppingId"
-    FOREIGN KEY "toppingId"
+    FOREIGN KEY ("toppingId")
       REFERENCES "Topping"("id")
-}
+);
 
-CREATE TABLE IF NOT EXISTS "Recipe" {
+CREATE TABLE IF NOT EXISTS "Recipe" (
   "id" INT PRIMARY KEY,
   "menuItemId" INT,
   "inventoryId" INT,
   "quantity" DECIMAL,
   "unit" VARCHAR,
   CONSTRAINT "FK_Recipe_menuItemId"
-    FOREIGN KEY "menuItemId"
+    FOREIGN KEY ("menuItemId")
       REFERENCES "MenuItem"("id"),
   CONSTRAINT "FK_Recipe_inventoryId"
-    FOREIGN KEY "inventoryId"
+    FOREIGN KEY ("inventoryId")
       REFERENCES "Inventory"("id")
-}
+);
