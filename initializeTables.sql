@@ -59,3 +59,29 @@ CREATE TABLE IF NOT EXISTS "Topping" (
   "price" DECIMAL
 );
 
+
+CREATE TABLE IF NOT EXISTS "OrderItem_Topping" {
+  "orderId" INT,
+  "toppingId" INT,
+  PRIMARY KEY ("orderId", "toppingId"),
+  CONSTRAINT "FK_OrderItem_orderId"
+    FOREIGN KEY "orderId"
+      REFERENCES "OrderItem"("id"),
+  CONSTRAINT "FK_OrderItem_toppingId"
+    FOREIGN KEY "toppingId"
+      REFERENCES "Topping"("id")
+}
+
+CREATE TABLE IF NOT EXISTS "Recipe" {
+  "id" INT PRIMARY KEY,
+  "menuItemId" INT,
+  "inventoryId" INT,
+  "quantity" DECIMAL,
+  "unit" VARCHAR,
+  CONSTRAINT "FK_Recipe_menuItemId"
+    FOREIGN KEY "menuItemId"
+      REFERENCES "MenuItem"("id"),
+  CONSTRAINT "FK_Recipe_inventoryId"
+    FOREIGN KEY "inventoryId"
+      REFERENCES "Inventory"("id")
+}
